@@ -35,31 +35,24 @@ module.exports.inserir_grupos = function(req, res){
         }
     )
 };
-// Modulo de remover os contato (deletar) ainda não funciona, 
+
 module.exports.remover_grupos = function(req, res){
     let id = req.params.id;
     let token = req.headers.token
-    let id_grupo = jwt.decode(token).id_grupo;
-
-    let promise = Grupo.findByIdAndDelete(id).populate().exec();
-    promise.then(
-        function(grupo){
-            if(id == id_grupo){
-                promise.then(
-                    function(grupo){
-                        res.status(200).json(view_grupo.render(grupo));
-                    }).catch(
-                        function(error){
-                            res.status(401).send("Não foi possivel remover")
-                        }
-                    )
-            }else{
-                res.status(401).send("Não autorizado");
+    let id_grupos = jwt.decode(token).id_grupos;
+    
+    if(id == id_grupos){
+        let promise = Contato.findByIdAndDelete(id).exec();
+        promise.then(
+            function(){
+                res.status(200).json("Grupo removido!");
             }
-        }
-    ).catch(
-        function(error){
-            res.status(400).json(error);
-        }
-    )
+        ).catch(
+            function(error){
+                res.status(200).json("Não Autorizado!")      
+            }
+        ) 
+    }else{   
+        res.status(401).json("Não Autorizado");
+    }
 };
