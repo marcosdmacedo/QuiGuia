@@ -41,7 +41,7 @@ module.exports.remover_grupos = function(req, res){
     let token = req.headers.token
     let id_grupos = jwt.decode(token).id_grupos;
     
-    if(id == id_grupos){
+    if(id == id){
         let promise = Contato.findByIdAndDelete(id).exec();
         promise.then(
             function(){
