@@ -33,24 +33,24 @@ module.exports.inserir_contatos = function(req, res){
         }
     )
 };
-// Modulo de remover os contato (deletar) ainda não funciona, 
+
 module.exports.remover_contatos = function(req, res){
     let id = req.params.id;
     let token = req.headers.token
     let id_contato = jwt.decode(token).id_contato;
-
-    let promise = Contato.findByIdAndDelete(id).exec();
-    promise.then(
-        function(contato){
-            if(contato._id == id_contato){
-                res.status(200).json("Contato Removido!");    
-            }else{
-                res.status(401).send("Não Autorizado");
+    
+    if(id == id_contato){
+        let promise = Contato.findByIdAndDelete(id).exec();
+        promise.then(
+            function(){
+                res.status(200).json("Contato Removido!");
             }
-        }
-    ).catch(
-        function(error){
-            res.status(401).json(error);
-        }
-    )
+        ).catch(
+            function(error){
+                res.status(200).json("Não Autorizado!")      
+            }
+        ) 
+    }else{   
+        res.status(401).json("Não Autorizado");
+    }
 };
